@@ -1,6 +1,6 @@
 # 🚀 SimsRNG 🎲
 
-SimsRNG is an innovative tool for generating randomized Sims attributes from a given dataset!
+SimsRNG is a tool for generating randomized Sims attributes from a given dataset!
 
 ## 📦 Getting Started
 
