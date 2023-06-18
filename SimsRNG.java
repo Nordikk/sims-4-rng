@@ -29,14 +29,14 @@ public class SimsRNG extends JFrame {
         filePath = "attributes.csv";
 
         // Create the table with the initial data
-        tableModel = new DefaultTableModel(new Object[][]{}, new Object[]{});
+        tableModel = new DefaultTableModel(new Object[][] {}, new Object[] {});
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
         // Create the buttons with the names from the "Zimmer" column
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BorderLayout()); 
+        buttonPanel.setLayout(new BorderLayout());
         add(buttonPanel, BorderLayout.SOUTH);
 
         // Create a new JPanel for Save and Reload buttons
@@ -83,7 +83,8 @@ public class SimsRNG extends JFrame {
 
     private List<String> loadAttributesFromFile() {
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8));
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8));
             List<String> attributes = new ArrayList<>();
             String line;
             while ((line = reader.readLine()) != null) {
@@ -145,21 +146,21 @@ public class SimsRNG extends JFrame {
             }
             Random random = new Random();
             int randomRow = matchingRows.get(random.nextInt(matchingRows.size()));
-             StringBuilder attributeValues = new StringBuilder();
-    attributeValues.append("Zimmer: ").append(zimmerValue).append("\n");
-    for (int i = 1; i < tableModel.getColumnCount(); i++) {
-        String columnName = tableModel.getColumnName(i);
-        String value = getRandomAttributeValue(randomRow, i);
-        attributeValues.append(columnName).append(": ").append(value).append("\n");
-    }
-    JOptionPane pane = new JOptionPane(attributeValues.toString(), JOptionPane.INFORMATION_MESSAGE);
-    JButton copy = new JButton("Copy");
-    copy.addActionListener(ae -> {
-        StringSelection stringSelection = new StringSelection(attributeValues.toString());
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(stringSelection, null);
-    });
-            pane.setOptions(new Object[]{copy});
+            StringBuilder attributeValues = new StringBuilder();
+            attributeValues.append("Zimmer: ").append(zimmerValue).append("\n");
+            for (int i = 1; i < tableModel.getColumnCount(); i++) {
+                String columnName = tableModel.getColumnName(i);
+                String value = getRandomAttributeValue(randomRow, i);
+                attributeValues.append(columnName).append(": ").append(value).append("\n");
+            }
+            JOptionPane pane = new JOptionPane(attributeValues.toString(), JOptionPane.INFORMATION_MESSAGE);
+            JButton copy = new JButton("Copy");
+            copy.addActionListener(ae -> {
+                StringSelection stringSelection = new StringSelection(attributeValues.toString());
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                clipboard.setContents(stringSelection, null);
+            });
+            pane.setOptions(new Object[] { copy });
             JDialog dialog = pane.createDialog(SimsRNG.this, "Random Attributes");
             dialog.setVisible(true);
         }
@@ -191,7 +192,8 @@ public class SimsRNG extends JFrame {
 
     private void saveChanges() {
         try {
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8));
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8));
             StringBuilder headerLine = new StringBuilder();
             for (int i = 0; i < tableModel.getColumnCount(); i++) {
                 if (i > 0) {
@@ -229,4 +231,3 @@ public class SimsRNG extends JFrame {
         new SimsRNG();
     }
 }
-
