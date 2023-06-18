@@ -8,8 +8,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
-import java.awt.datatransfer.Clipboard; // add this line
-import java.awt.datatransfer.StringSelection; // add this line
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 
 public class SimsRNG extends JFrame {
     private JTable table;
