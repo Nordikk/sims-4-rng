@@ -129,9 +129,16 @@ public class SimsRNG extends JFrame {
 
     private class ZimmerButtonActionListener implements ActionListener {
         private String zimmerValue;
+        private List<String> unusedStilValues; // Used to keep track of which Stil values have been used
+        private List<String> unusedFarbeValues; // Used to keep track of which Farbe values have been used
 
         public ZimmerButtonActionListener(String zimmerValue) {
             this.zimmerValue = zimmerValue;
+            this.unusedStilValues = new ArrayList<>(Arrays.asList(getColumnData("Stil")));
+            this.unusedStilValues.removeIf(String::isEmpty);
+            this.unusedFarbeValues = new ArrayList<>(Arrays.asList(getColumnData("Farbe")));
+            this.unusedFarbeValues.removeIf(String::isEmpty);
+
         }
 
         @Override
@@ -166,19 +173,33 @@ public class SimsRNG extends JFrame {
         }
 
         private String getRandomAttributeValue(int row, int column) {
-            List<String> attributeValues = new ArrayList<>();
-            for (int i = 0; i < tableModel.getRowCount(); i++) {
-                Object value = tableModel.getValueAt(i, column);
-                String stringValue = value != null ? value.toString() : "";
-                if (!stringValue.isEmpty()) {
-                    attributeValues.add(stringValue);
+            String columnName = tableModel.getColumnName(column);
+            Random random = new Random();
+            if (columnName.equals("Stil")) {
+                if (unusedStilValues.isEmpty()) {
+                    return "";
+                } else {
+                    return unusedStilValues.remove(random.nextInt(unusedStilValues.size()));
                 }
+            } else if (columnName.equals("Farbe")) {
+                if (unusedFarbeValues.isEmpty()) {
+                    return "";
+                } else {
+                    return unusedFarbeValues.remove(random.nextInt(unusedFarbeValues.size()));
+                }
+            } else {
+                List<String> attributeValues = new ArrayList<>();
+                for (int i = 0; i < tableModel.getRowCount(); i++) {
+                    String value = tableModel.getValueAt(i, column).toString();
+                    if (!value.isEmpty()) {
+                        attributeValues.add(value);
+                    }
+                }
+                if (!attributeValues.isEmpty()) {
+                    return attributeValues.get(random.nextInt(attributeValues.size()));
+                }
+                return "";
             }
-            if (!attributeValues.isEmpty()) {
-                Random random = new Random();
-                return attributeValues.get(random.nextInt(attributeValues.size()));
-            }
-            return "";
         }
     }
 
