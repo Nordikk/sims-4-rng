@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.List;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import javax.swing.Timer;
 
 public class SimsRNG extends JFrame {
     private JTable table;
@@ -17,14 +18,19 @@ public class SimsRNG extends JFrame {
     private JButton[] btnZimmer;
     private JButton btnSave;
     private JButton btnReload;
+    private JButton btnStartTimer;
+    private JButton btnStopTimer;
+    private JTextField timerDelayField;
     private JPanel zimmerPanel;
+    private Timer timer;
 
     private String filePath;
+    private int timeRemaining;
 
     public SimsRNG() {
         setTitle("Sims-RNG");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         filePath = "attributes.csv";
 
@@ -32,12 +38,12 @@ public class SimsRNG extends JFrame {
         tableModel = new DefaultTableModel(new Object[][] {}, new Object[] {});
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(table);
-        add(scrollPane, BorderLayout.CENTER);
+        add(scrollPane);
 
         // Create the buttons with the names from the "Zimmer" column
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BorderLayout());
-        add(buttonPanel, BorderLayout.SOUTH);
+        buttonPanel.setLayout(new GridLayout(2, 2)); // Added grid layout for better button positioning
+        add(buttonPanel);
 
         // Create a new JPanel for Save and Reload buttons
         JPanel saveReloadPanel = new JPanel();
@@ -54,6 +60,49 @@ public class SimsRNG extends JFrame {
 
         zimmerPanel = new JPanel(); // Initialize zimmerPanel
         buttonPanel.add(zimmerPanel, BorderLayout.CENTER); // Add it to the buttonPanel
+
+        // Timer panel
+        JPanel timerPanel = new JPanel();
+        add(timerPanel);
+
+        JLabel lblTimer = new JLabel("Timer (minutes):");
+        timerPanel.add(lblTimer);
+
+        JTextField timerDelayField = new JTextField("0", 5);
+        timerPanel.add(timerDelayField);
+
+        JButton btnStartTimer = new JButton("Start Timer");
+        timerPanel.add(btnStartTimer);
+
+        JButton btnStopTimer = new JButton("Stop Timer");
+        timerPanel.add(btnStopTimer);
+
+        JLabel lblRemainingTime = new JLabel("00:00");
+        timerPanel.add(lblRemainingTime);
+
+        Timer timer = new Timer(0, null);
+        timer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                timeRemaining--;
+                int minutes = timeRemaining / 60;
+                int seconds = timeRemaining % 60;
+                lblRemainingTime.setText(String.format("%02d:%02d", minutes, seconds));
+                if (timeRemaining <= 0) {
+                    ((Timer) e.getSource()).stop();
+                    JOptionPane.showMessageDialog(SimsRNG.this, "Timer abgelaufen.", "Timer", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
+
+        btnStartTimer.addActionListener(e -> {
+            int minutes = Integer.parseInt(timerDelayField.getText());
+            timeRemaining = minutes * 60;
+            timer.setDelay(1000); // Count down every second
+            timer.start();
+        });
+
+        btnStopTimer.addActionListener(e -> timer.stop());
 
         setLocationRelativeTo(null);
 
