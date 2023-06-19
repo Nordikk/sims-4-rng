@@ -1,12 +1,12 @@
 # 🚀 SimsRNG 🎲
 
-SimsRNG is an innovative tool for generating randomized Sims attributes from a given dataset!
+SimsRNG is a tool for generating randomized Sims attributes from a given dataset!
 
 ## 📦 Getting Started
 
 To use SimsRNG, follow these simple steps:
 
-1. Download the provided ZIP file.
+1. Download the provided [ZIP file](https://github.com/Nordikk/sims-4-rng/releases/).
 2. Extract the ZIP file.
 3. Place both the `Sims-RNG.exe` and the `attributes.csv` in the same directory.
 
